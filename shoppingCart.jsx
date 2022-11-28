@@ -15,8 +15,11 @@ function NavBar({ stockitems }) {
     // use newStock = stock.map to find "name" and decrease number in stock by 1
     // only if instock is >=  do we move item to Cart and update stock
     if (num <= 0) return;
+    //item is an object of {name, stock}, the stock array needs to be filtered for
+    //the clicked item so that not every single item will be decreased
     let item = stock.filter((item) => item.name == name);
     
+    //decreasing stock
     let newStock = stock.map((item) => {
       if (item.name == name) item.instock--;
       
