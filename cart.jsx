@@ -1,6 +1,6 @@
 // simulate getting products from DataBase
 const products = [
-  { name: "Apples ", country: "Italy", cost: 3, instock: 10 },
+  { name: "Apples ", country: "Italy", cost: 3, instock: 0 },
   { name: "Oranges", country: "Spain", cost: 4, instock: 3 },
   { name: "Beans", country: "USA", cost: 2, instock: 5 },
   { name: "Cabbage", country: "USA", cost: 5, instock: 8 },
@@ -45,7 +45,7 @@ const useDataApi = (initialUrl, initialData) => {
     return () => {
       didCancel = true;
     };
-  }, [url]);
+  }, []);
   return [state, setUrl];
 };
 const dataFetchReducer = (state, action) => {
@@ -101,8 +101,8 @@ const Products = (props) => {
   // Fetch Data
   const addToCart = (e) => {
     let name = e.target.name;
-    let item = items.filter((item) => item.name == name);
-    if (item[0].instock === 0) return;
+    let item = items.filter((item) => item.name == name); //filter returns an array, could be just one item
+    if (item[0].instock == 0) return;
     item[0].instock = item[0].instock - 1;
     //console.log(`add to Cart ${JSON.stringify(item)}`);
     setCart([...cart, ...item]);
@@ -110,9 +110,9 @@ const Products = (props) => {
   };
   const deleteCartItem = (deleteIndex) => {
     let newCart = cart.filter((item, i) => deleteIndex != i);
-    let target = cart.filter((item, index) => deleteIndex == index);
+    let delTarget = cart.filter((item, index) => deleteIndex == index);
     let newItems = items.map((item, index) => {
-      if (item.name == target[0].name) item.instock += 1;
+      if (item.name == delTarget[0].name) item.instock = item.instock + 1;
       return item;
     })
     setCart(newCart);
@@ -169,7 +169,7 @@ const Products = (props) => {
   };
   // TODO: implement the restockProducts function
   const restockProducts = (url) => {
-    doFetch(url);
+    console.log(doFetch(url));
     let newItems = data.map((item) => {
       let {name, country, cost, instock } = item;
       return {name, country, cost, instock};

@@ -101,8 +101,8 @@ const Products = (props) => {
   // Fetch Data
   const addToCart = (e) => {
     let name = e.target.name;
-    let item = items.filter((item) => item.name == name);
-    if (item[0].instock === 0) return;
+    let item = items.filter((item) => item.name == name); //filter returns an array, could be just one item
+    if (item[0].instock == 0) return;
     item[0].instock = item[0].instock - 1;
     //console.log(`add to Cart ${JSON.stringify(item)}`);
     setCart([...cart, ...item]);
@@ -110,9 +110,9 @@ const Products = (props) => {
   };
   const deleteCartItem = (deleteIndex) => {
     let newCart = cart.filter((item, i) => deleteIndex != i);
-    let target = cart.filter((item, index) => deleteIndex == index);
+    let delTarget = cart.filter((item, index) => deleteIndex == index);
     let newItems = items.map((item, index) => {
-      if (item.name == target[0].name) item.instock += 1;
+      if (item.name == delTarget[0].name) item.instock = item.instock + 1;
       return item;
     })
     setCart(newCart);
@@ -127,10 +127,10 @@ const Products = (props) => {
     return (
       <li key={index}>
         <Image src={url} width={70} roundedCircle></Image>
-        <Button variant="primary" size="large">
+        <Button variant="primary" size="large" name={item.name} onClick={addToCart}>
         ${item.cost} {item.name}  - Stock: {item.instock}
         </Button>
-        <input name={item.name} type="submit" onClick={addToCart}></input>
+        {/* <input name={item.name} type="submit" onClick={addToCart}></input> */}
       </li>
     );
   });
