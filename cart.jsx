@@ -2,7 +2,7 @@
 const products = [
   { name: "Apples ", country: "Italy", cost: 3, instock: 10 },
   { name: "Oranges", country: "Spain", cost: 4, instock: 3 },
-  { name: "G-Beans", country: "USA", cost: 2, instock: 5 },
+  { name: "Beans", country: "USA", cost: 2, instock: 5 },
   { name: "Cabbage", country: "USA", cost: 5, instock: 8 },
 ];
 //=========Cart=============
@@ -120,7 +120,7 @@ const Products = (props) => {
       <li key={index}>
         <Image src={url} width={70} roundedCircle></Image>
         <Button variant="primary" size="large" name={item.name} onClick={addToCart}>
-          {item.name} ${item.cost} - Stock: {item.instock}
+        ${item.cost} {item.name}  - Stock: {item.instock}
         </Button>
         {/* <input name={item.name} type="submit" onClick={addToCart}></input> */}
       </li>
