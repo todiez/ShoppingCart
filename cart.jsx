@@ -115,7 +115,7 @@ const Products = (props) => {
     let newCart = cart.filter((item, i) => index != i);
     setCart(newCart);
   };
-  const photos = ["apple.png", "orange.png", "beans.png", "cabbage.png", "pineapple.jpg", "strawberry.jpg"];
+  const photos = ["apple.png", "orange.png", "beans.png", "cabbage.png", "strawberry.jpg", "pineapple.jpg"];
 
   let list = items.map((item, index) => {
     // let n = index + Math.floor(Math.random()*1000);
