@@ -122,11 +122,11 @@ const Products = (props) => {
 
   let list = items.map((item, index) => {
     let n = index + Math.floor(Math.random()*1000);
-    let url = "https://picsum.photos/id/" + n + "/70/70";
+    let urlPhoto = "https://picsum.photos/id/" + n + "/70/70";
 
     return (
       <li key={index}>
-        <Image src={url} width={70} roundedCircle></Image>
+        <Image src={urlPhoto} width={70} roundedCircle></Image>
         <Button variant="primary" size="large" name={item.name} onClick={addToCart}>
         ${item.cost} {item.name}  - Stock: {item.instock}
         </Button>
