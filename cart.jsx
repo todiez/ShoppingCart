@@ -1,7 +1,7 @@
 // simulate getting products from DataBase
 const products = [
   { name: "Apples", country: "Italy", cost: 3, instock: 10 },
-  { name: "Oranges", country: "Spain", cost: 4, instock: 0 },
+  { name: "Oranges", country: "Spain", cost: 4, instock: 2 },
   { name: "G-Beans", country: "USA", cost: 2, instock: 5 },
   { name: "Cabbage", country: "USA", cost: 1, instock: 8 },
 ];
@@ -104,16 +104,23 @@ const Products = (props) => {
     let item = items.filter((item) => item.name == name);
     if (item[0].instock == 0) {
       alert("No more Stock");
-        return;
-      };
-    item[0].intstock = item[0].instock - 1;
+      return;
+    }
+    item[0].instock = item[0].instock - 1;
     //console.log(`add to Cart ${JSON.stringify(item)}`);
     setCart([...cart, ...item]);
-    //doFetch(query);
   };
-  const deleteCartItem = (index) => {
-    let newCart = cart.filter((item, i) => index != i);
+  const deleteCartItem = (delIndex) => {
+    // this is the index in the cart not in the Product List
+
+    let newCart = cart.filter((item, i) => delIndex != i);
+    let target = cart.filter((item, index) => delIndex == index);
+    let newItems = items.map((item, index) => {
+      if (item.name == target[0].name) item.instock = item.instock + 1;
+      return item;
+    });
     setCart(newCart);
+    setItems(newItems);
   };
   const photos = ["apple.png", "orange.png", "beans.png", "cabbage.png", "strawberry.jpg", "pineapple.jpg"];
 
@@ -127,7 +134,7 @@ const Products = (props) => {
         <Button variant="primary" size="large" name={item.name} onClick={addToCart}>
           ${item.cost} {item.name}  - Stock: {item.instock}
         </Button>
-        <input name={item.name} type="submit" onClick={addToCart}></input>
+        {/* <input name={item.name} type="submit" onClick={addToCart}></input> */}
       </li>
     );
   });
@@ -175,7 +182,6 @@ const Products = (props) => {
       let { name, country, cost, instock } = item.attributes;
       return { name, country, cost, instock };
     });  
-
    
     const j = (items.length < newItems.length ? items.length : newItems.length);
     // console.log(j);
