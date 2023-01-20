@@ -1,15 +1,15 @@
 // simulate getting products from DataBase
 const products = [
-  { name: "Apples ", country: "Italy", cost: 3, instock: 0 },
-  { name: "Oranges", country: "Spain", cost: 4, instock: 3 },
-  { name: "Beans", country: "USA", cost: 2, instock: 5 },
-  { name: "Cabbage", country: "USA", cost: 5, instock: 8 },
+  { name: "Apples_:", country: "Italy", cost: 3, instock: 10 },
+  { name: "Oranges:", country: "Spain", cost: 4, instock: 3 },
+  { name: "Beans__:", country: "USA", cost: 2, instock: 5 },
+  { name: "Cabbage:", country: "USA", cost: 1, instock: 8 },
 ];
 //=========Cart=============
 const Cart = (props) => {
   const { Card, Accordion, Button } = ReactBootstrap;
   let data = props.location.data ? props.location.data : products;
-  //console.log(`data:${JSON.stringify(data)}`);
+  console.log(`data:${JSON.stringify(data)}`);
 
   return <Accordion defaultActiveKey="0">{list}</Accordion>;
 };
@@ -23,15 +23,15 @@ const useDataApi = (initialUrl, initialData) => {
     isError: false,
     data: initialData,
   });
-  //console.log(`useDataApi called`);
+  console.log(`useDataApi called`);
   useEffect(() => {
-    //console.log("useEffect Called");
+    console.log("useEffect Called");
     let didCancel = false;
     const fetchData = async () => {
       dispatch({ type: "FETCH_INIT" });
       try {
         const result = await axios(url);
-        //console.log("FETCH FROM URl");
+        console.log("FETCH FROM URl");
         if (!didCancel) {
           dispatch({ type: "FETCH_SUCCESS", payload: result.data });
         }
@@ -45,7 +45,7 @@ const useDataApi = (initialUrl, initialData) => {
     return () => {
       didCancel = true;
     };
-  }, []);
+  }, [url]);
   return [state, setUrl];
 };
 const dataFetchReducer = (state, action) => {
@@ -97,40 +97,32 @@ const Products = (props) => {
       data: [],
     }
   );
-  //console.log(`Rendering Products ${JSON.stringify(data)}`);
+  console.log(`Rendering Products ${JSON.stringify(data)}`);
   // Fetch Data
   const addToCart = (e) => {
     let name = e.target.name;
-    let item = items.filter((item) => item.name == name); //filter returns an array, could be just one item
-    if (item[0].instock == 0) return;
-    item[0].instock = item[0].instock - 1;
-    //console.log(`add to Cart ${JSON.stringify(item)}`);
+    let item = items.filter((item) => item.name == name);
+    console.log(`add to Cart ${JSON.stringify(item)}`);
     setCart([...cart, ...item]);
     //doFetch(query);
   };
-  const deleteCartItem = (deleteIndex) => {
-    let newCart = cart.filter((item, i) => deleteIndex != i);
-    let delTarget = cart.filter((item, index) => deleteIndex == index);
-    let newItems = items.map((item, index) => {
-      if (item.name == delTarget[0].name) item.instock = item.instock + 1;
-      return item;
-    })
+  const deleteCartItem = (index) => {
+    let newCart = cart.filter((item, i) => index != i);
     setCart(newCart);
-    setItems(newItems);
   };
   const photos = ["apple.png", "orange.png", "beans.png", "cabbage.png"];
 
   let list = items.map((item, index) => {
-    let n = index + Math.floor(Math.random()*1000);
-    let url = "https://picsum.photos/id/" + n + "/70/70";
+    //let n = index + 1049;
+    //let url = "https://picsum.photos/id/" + n + "/50/50";
 
     return (
       <li key={index}>
-        <Image src={url} width={70} roundedCircle></Image>
-        <Button variant="primary" size="large" name={item.name} onClick={addToCart}>
-        ${item.cost} {item.name}  - Stock: {item.instock}
+        <Image src={photos[index % 4]} width={70} roundedCircle></Image>
+        <Button variant="primary" size="large">
+          {item.name}:{item.cost}
         </Button>
-        {/* <input name={item.name} type="submit" onClick={addToCart}></input> */}
+        <input name={item.name} type="submit" onClick={addToCart}></input>
       </li>
     );
   });
@@ -169,14 +161,21 @@ const Products = (props) => {
   };
   // TODO: implement the restockProducts function
   const restockProducts = (url) => {
-    console.log(doFetch(url));
-    let newItems = data.map((item) => {
-      let {name, country, cost, instock } = item;
-      return {name, country, cost, instock};
-    });
-    setItems([...items, ...newItems]);
+    doFetch(url);
+    
+    let restockProducts = [];    
+    for (let i = 0; i < data.data.length; i++) {
+      restockProducts.push({});    
+      for (const [key, value] of Object.entries(data.data[i].attributes)) {      
+        if ((key !== 'createdAt') && (key !== 'updatedAt') && (key !== 'publishedAt')) {
+          restockProducts[i][key] = value;
+        } 
+      }      
+    }    
+    setItems(restockProducts);
   };
 
+  
   return (
     <Container>
       <Row>
@@ -197,7 +196,7 @@ const Products = (props) => {
       <Row>
         <form
           onSubmit={(event) => {
-            restockProducts(`http://localhost:1337/api/${query}`);
+            restockProducts(`http://localhost:1337/${query}`);
             console.log(`Restock called on ${query}`);
             event.preventDefault();
           }}
