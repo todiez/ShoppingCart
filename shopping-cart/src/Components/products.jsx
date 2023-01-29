@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import "bootstrap/dist/css/bootstrap.css";
+import beans from "./pictures/beans.png";
 //import ReactBootstrap from 'react-bootstrap';
 
 //import * as ReactBootstrap from 'react-bootstrap';
@@ -131,15 +133,15 @@ const Products = (props) => {
     setCart(newCart);
     setItems(newItems);
   };
-  const photos = ["apple.png", "orange.png", "beans.png", "cabbage.png", "strawberry.jpg", "pineapple.jpg"];
+  //const photos = ["apple.png", "orange.png", "beans.png", "cabbage.png", "strawberry.jpg", "pineapple.jpg"];
 
   let list = items.map((item, index) => {
-    // let n = index + Math.floor(Math.random()*1000);
-    // let urlPhoto = "https://picsum.photos/id/" + n + "/70/70";
+    let n = index + Math.floor(Math.random()*1000);
+    let urlPhoto = "https://picsum.photos/id/" + n + "/70/70";
 
     return (
       <li key={index}>
-        <Image src={photos[index % 6]} width={70} roundedCircle></Image>
+        <Image src={beans} width={70} roundedCircle></Image>
         <Button variant="primary" size="large" name={item.name} onClick={addToCart}>
           ${item.cost} {item.name}  - Stock: {item.instock}
         </Button>
