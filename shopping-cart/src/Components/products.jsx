@@ -1,3 +1,20 @@
+import React from 'react';
+import axios from 'axios';
+//import ReactBootstrap from 'react-bootstrap';
+
+//import * as ReactBootstrap from 'react-bootstrap';
+import {
+  //Card,
+  Accordion,
+  Button,
+  Container,
+  Row,
+  Col,
+  Image,
+  Input,
+} from 'react-bootstrap';
+
+
 // simulate getting products from DataBase
 const products = [
   { name: "Apples", country: "Italy", cost: 3, instock: 10 },
@@ -5,13 +22,14 @@ const products = [
   { name: "G-Beans", country: "USA", cost: 2, instock: 5 },
   { name: "Cabbage", country: "USA", cost: 1, instock: 8 },
 ];
+
 //=========Cart=============
 const Cart = (props) => {
-  const { Card, Accordion, Button } = ReactBootstrap;
+  // const { Card, Accordion, Button } = ReactBootstrap;
   let data = props.location.data ? props.location.data : products;
   //console.log(`data:${JSON.stringify(data)}`);
 
-  return <Accordion defaultActiveKey="0">blublbu</Accordion>;
+  return <Accordion defaultActiveKey="0">test</Accordion>;
 };
 
 const useDataApi = (initialUrl, initialData) => {
@@ -78,16 +96,7 @@ const Products = (props) => {
   const [items, setItems] = React.useState(products);
   const [cart, setCart] = React.useState([]);
   const [total, setTotal] = React.useState(0);
-  const {
-    Card,
-    Accordion,
-    Button,
-    Container,
-    Row,
-    Col,
-    Image,
-    Input,
-  } = ReactBootstrap;
+
   //  Fetch Data
   const { Fragment, useState, useEffect, useReducer } = React;
   const [query, setQuery] = useState("http://localhost:1337/api/products");
@@ -101,8 +110,8 @@ const Products = (props) => {
   // Fetch Data
   const addToCart = (e) => {
     let name = e.target.name;
-    let item = items.filter((item) => item.name == name);
-    if (item[0].instock == 0) {
+    let item = items.filter((item) => item.name === name);
+    if (item[0].instock === 0) {
       alert("No more Stock");
       return;
     }
@@ -113,10 +122,10 @@ const Products = (props) => {
   const deleteCartItem = (delIndex) => {
     // this is the index in the cart not in the Product List
 
-    let newCart = cart.filter((item, i) => delIndex != i);
-    let target = cart.filter((item, index) => delIndex == index);
+    let newCart = cart.filter((item, i) => delIndex !== i);
+    let target = cart.filter((item, index) => delIndex === index);
     let newItems = items.map((item, index) => {
-      if (item.name == target[0].name) item.instock = item.instock + 1;
+      if (item.name === target[0].name) item.instock = item.instock + 1;
       return item;
     });
     setCart(newCart);
@@ -189,7 +198,7 @@ const Products = (props) => {
 
     let newProductList = [];
     for (let i = 0; i < j; i++) {
-      if (items[i].name == newItems[i].name) {
+      if (items[i].name === newItems[i].name) {
        
         newProductList.push({
           name: items[i].name,
@@ -252,5 +261,5 @@ const Products = (props) => {
     </Container>
   );
 };
-// ========================================
-ReactDOM.render(<Products />, document.getElementById("root"));
+
+export default Products;
